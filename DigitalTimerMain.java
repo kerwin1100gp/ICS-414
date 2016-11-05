@@ -3,49 +3,105 @@
  * 
  * @author Kevin Beydler, Bryson, Kerwin 
  * @version ICS 414
- * @date 10/19/2016
+ * @date 11/2/2016
  **/
 
-//import preprocessor directives
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Scanner;
+	//import preprocessor directives
+	 import java.awt.Color;
+	 import java.awt.Font;
+	 import java.awt.event.ActionEvent;
+	 import java.awt.event.ActionListener;
+	 import java.text.SimpleDateFormat;
+	 import java.util.Date;
+	 import javax.swing.Timer;
+	 import java.util.Scanner;
+			 import java.awt.*;
+			 import java.awt.event.ActionEvent;
+			 import java.awt.event.ActionListener;
+			 import java.text.SimpleDateFormat;
+			 import java.util.Date;
+			 import javax.swing.*;
+			 import javax.swing.GroupLayout.ParallelGroup;
 
-public class DigitalTimerMain {
-	
-	int seconds = 0;
-	
-	Timer timer = new Timer(); //creating a standard java.util timer obj
-	
-	TimerTask task = new TimerTask(){
-		public void run(){
-		seconds++;
-		System.out.println(seconds);
-		}
-	};
-	//start method to start the timer when called in main()
-	public void start(){
-		timer.scheduleAtFixedRate(task,1000,1000);
-	}
+			 /*
+			  * main class: uses JPanel object for GUI
+			  */
+			 public class DigitalTimerMain extends JPanel implements ActionListener {
+				 
+				 static Scanner input = new Scanner(System.in);
 
-	//main driver function
-	public static void main(String[] args) {
-		
-				System.out.println("Beginning Your Work Session:");
-				DigitalTimerMain digitaltimer = new DigitalTimerMain();
-				digitaltimer.start();
-	}
-	
-	
-	//need to create the parameters of the Digital Timer
-	//need an actual working timer
+			     private SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+			     private Timer timer;
+			     private JLabel clockLabel = new JLabel("Time");
 
-}
+			     public DigitalTimerMain() {
+			         super();
+
+			         clockLabel.setText(sdf.format(new Date(System.currentTimeMillis())));
+			         clockLabel.setFont(new Font("Monospaced", Font.BOLD, 100));
+			         clockLabel.setOpaque(true);
+			         clockLabel.setBackground(Color.white);
+			         clockLabel.setForeground(Color.black);
+
+			         timer = new Timer(500, this);
+			         timer.setRepeats(true);
+			         timer.start();
+
+			         initComponents();
+			     }
+
+			     @Override
+			     public void actionPerformed(ActionEvent e){
+			         if(e.getSource().equals(timer))
+			             clockLabel.setText(sdf.format(
+			                 new Date(System.currentTimeMillis())));
+			     }
+
+			     private void initComponents() {
+
+			         GroupLayout layout = new GroupLayout(this);
+			         ParallelGroup parallelGroupH = layout.createParallelGroup(
+			                 GroupLayout.Alignment.LEADING);
+			         this.setLayout(layout);
+			         layout.setHorizontalGroup(
+			                 parallelGroupH
+			                 .addGap(0, 400, Short.MAX_VALUE)
+			                 );
+			         ParallelGroup parallelGroupV = layout.createParallelGroup(
+			                 GroupLayout.Alignment.LEADING);
+			         layout.setVerticalGroup(
+			                 parallelGroupV
+			                 .addGap(0, 30, Short.MAX_VALUE)
+			                 );
+			         parallelGroupH.addComponent(clockLabel);
+			         parallelGroupV.addComponent(clockLabel);
+			     }
+
+			     public static void main(String[] args) throws Exception {
+			    	 System.out.println("Welcome to Team Orange's ICS 414 Digital Timer Project. Please select an option to begin \n 1) Begin Timer \n 2) See User Instructions \n 3) Exit Program");
+			    	 do
+			    	 {
+			    	 if(input.nextInt() == 1){
+			         SwingUtilities.invokeLater(new Runnable() {
+			             public void run() {
+			                 JOptionPane.showMessageDialog(null, new DigitalTimerObject());
+			             }
+			         });
+			    	 }
+			    	 else if(input.nextInt() == 2)
+			    	 {
+			    		 System.out.println("Instructions...");
+			    		 
+			    	 }
+			    	 else if(input.nextInt() == 3)
+			    	 {
+			    		 System.out.println("Exiting...");
+			    		 System.exit(0);
+			    	 }
+			    	 else if(input.nextInt() != 1 ||input.nextInt() != 2 ||input.nextInt() != 3)
+			    	 {
+			    		 System.out.println("ERROR: Please enter one of the possible options.");
+			    	 }
+			    	 }while(input.nextInt() != 1 ||input.nextInt() != 2 ||input.nextInt() != 3);
+			     }
+			 }
